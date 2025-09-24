@@ -31,7 +31,6 @@ def on_submit():
     output_text.config(state=tk.DISABLED)
 
     entry.delete(0, tk.END)
-
     output_text.yview(tk.END)
 
 
