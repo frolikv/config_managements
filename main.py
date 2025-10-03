@@ -9,6 +9,8 @@ output_text = None
 submit_button = None
 input_var = None
 
+ERR_MSG = "unknown command:"
+
 def handle(a):
     l = shlex.split(a)
 
@@ -21,7 +23,7 @@ def handle(a):
     if cmd == "exit":
         root.quit()
         return ""
-    return f"unknown command: {cmd}"
+    return f"{ERR_MSG} {cmd}"
 
 
 def print_to_console(string):
@@ -31,10 +33,8 @@ def print_to_console(string):
     output_text.yview(tk.END)
 
 
-def get_from_console(prompt=""):
+def get_from_console():
     global input_var
-    if prompt:
-        print_to_console(prompt)
 
     input_var = tk.StringVar()
 
@@ -67,8 +67,28 @@ def on_submit():
 
 
 def start_procedure():
-    path = get_from_console("Please, enter path for starting script")
-    print_to_console(f"You entered: {path}")
+    print_to_console("Please, enter path for startup script")
+    while True:
+        path = get_from_console()
+        print_to_console(f"> {path}")
+        try:
+            with open(path, 'r') as file:
+                commands = file.readlines()
+                # print_to_console(commands)
+                for cmd in commands:
+                    # print(f"{cmd.strip()}")
+                    to_print = cmd.replace('\n', '')
+                    print_to_console(f"> {to_print}")
+                    res = handle(cmd)
+                    if res == f"{ERR_MSG} {to_print}":
+                        print_to_console(f"Error occurred in startup script - {res}")
+                        break
+                    print_to_console(res)
+                break
+        except BaseException:
+            print_to_console("File not found")
+            continue
+
 
 if __name__ == "__main__":
     # global root, entry, output_text, submit_button

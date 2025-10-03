@@ -1,3 +1,4 @@
 ls 123  321
 cd 123
 test
+cd awd
