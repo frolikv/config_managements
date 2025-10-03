@@ -15,8 +15,11 @@ def handle(a):
     if cmd == "exit":
         root.quit()
         return ""
-
     return f"unknown command: {cmd}"
+
+def execute(cmd, args = []):
+    if cmd == "error":
+        return f"unknown command: {cmd}"
 
 def start_script(start_path):
     with open(start_path, 'r') as file:
@@ -29,6 +32,13 @@ def print_to_console(string):
     output_text.config(state=tk.NORMAL)
     output_text.insert(tk.END, f"{string}\n")
     output_text.config(state=tk.DISABLED)
+
+def start_procedure():
+    print_to_console("Please, enter path for starting script")
+    user_input = entry.get()
+    print(f"i am {user_input}")
+    entry.delete(0, tk.END)
+    output_text.yview(tk.END)
 
 
 def on_submit():
@@ -49,7 +59,6 @@ if __name__ == "__main__":
     current_dir = os.getcwd()
     root.title(f"Эмулятор — {current_dir}")
 
-
     output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=20, state=tk.DISABLED)
     output_text.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
@@ -60,4 +69,7 @@ if __name__ == "__main__":
     entry.bind("<Return>", lambda event: on_submit())
     root.grid_columnconfigure(0, weight=1)
     entry.focus_set()
+
+    start_procedure()
+
     root.mainloop()

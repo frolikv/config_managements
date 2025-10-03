@@ -1,0 +1,49 @@
+{
+    "file_type": "dir",
+    "data": {
+        "repo": {
+            "file_type": "dir",
+            "data": {
+                "src": {
+                    "file_type": "dir",
+                    "data": {
+                        "main.py": {
+                            "file_type": "file",
+                            "content": "print(\"Main application\")"
+                        },
+                        "utils.py": {
+                            "file_type": "file",
+                            "content": "def helper():\n    print(\"Helper function\")"
+                        }
+                    }
+                },
+                "tests": {
+                    "file_type": "dir",
+                    "data": {
+                        "test_main.py": {
+                            "file_type": "file",
+                            "content": "import unittest\nclass TestMain(unittest.TestCase):\n    def test_example(self):\n        self.assertTrue(True)"
+                        },
+                        "test_utils.py": {
+                            "file_type": "file",
+                            "content": "import unittest\nclass TestUtils(unittest.TestCase):\n    def test_helper(self):\n        self.assertTrue(True)"
+                        }
+                    }
+                },
+                "docs": {
+                    "file_type": "dir",
+                    "data": {
+                        "README.md": {
+                            "file_type": "file",
+                            "content": "# Project Documentation\n\nThis is a sample project."
+                        },
+                        "api.md": {
+                            "file_type": "file",
+                            "content": "# API Documentation\n\nAPI details here."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
