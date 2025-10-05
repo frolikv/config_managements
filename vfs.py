@@ -11,4 +11,22 @@ def load_vfs(csv_path):
             vfs[path] = {'type': type, 'content': content}
     return vfs
 
-# print(load_vfs("vfs.csv"))
+def get_children(vfs, path):
+    if path[-1] != '/':
+        path += '/'
+    children = set()
+    for el in vfs:
+        if el.startswith(path) and el != path.rstrip('/'):
+            node = el[len(path):]
+            if '/' in node:
+                to_add = node.split('/')[0]
+                children.add(to_add)
+            else:
+                children.add(node)
+    if ('') in children:
+        children.remove('')
+    return children
+
+vfs = load_vfs("vfs.csv")
+
+print(get_children(vfs, '/'))
