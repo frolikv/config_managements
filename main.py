@@ -9,6 +9,8 @@ output_text = None
 submit_button = None
 input_var = None
 
+vfs_path = None
+
 ERR_MSG = "unknown command:"
 
 def handle(a):
@@ -67,16 +69,39 @@ def on_submit():
 
 
 def start_procedure():
-    print_to_console("Please, enter path for startup script")
+    # VFS
+    print_to_console("Please, enter VFS path (or \"q\")")
+    while True:
+        global vfs_path
+        vfs_path = get_from_console()
+        print_to_console(f"> {vfs_path}")
+
+        if (vfs_path == "q"):
+            print_to_console("VFS skipped")
+            vfs_path = None
+            break
+        try:
+            with open(vfs_path, 'r') as file:
+                #
+                pass
+        except BaseException:
+            print_to_console("File not found")
+            continue
+    # End of VFS
+
+    # Startup script
+    print_to_console("Please, enter path for startup script (or \"q\")")
     while True:
         path = get_from_console()
         print_to_console(f"> {path}")
+
+        if (path == "q"):
+            print_to_console("Startup script skipped")
+            break
         try:
             with open(path, 'r') as file:
                 commands = file.readlines()
-                # print_to_console(commands)
                 for cmd in commands:
-                    # print(f"{cmd.strip()}")
                     to_print = cmd.replace('\n', '')
                     print_to_console(f"> {to_print}")
                     res = handle(cmd)
