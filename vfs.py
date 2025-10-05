@@ -25,8 +25,4 @@ def get_children(vfs, path):
                 children.add(node)
     if ('') in children:
         children.remove('')
-    return children
-
-vfs = load_vfs("vfs.csv")
-
-print(get_children(vfs, '/'))
+    return sorted(children)

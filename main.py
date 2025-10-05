@@ -3,6 +3,8 @@ import os
 import tkinter as tk
 from tkinter import scrolledtext
 
+import vfs
+
 root = None
 entry = None
 output_text = None
@@ -80,13 +82,19 @@ def start_procedure():
             print_to_console("VFS skipped")
             vfs_path = None
             break
+        if not (vfs_path.endswith(".csv")):
+            print_to_console("VFS extension is not .csv")
+            continue
         try:
-            with open(vfs_path, 'r') as file:
-                #
-                pass
-        except BaseException:
+            loaded_vfs = vfs.load_vfs(vfs_path)
+            print(loaded_vfs)
+            print_to_console("VFS loaded")
+            break
+        except FileNotFoundError:
             print_to_console("File not found")
             continue
+        except BaseException:
+            print_to_console("Wrong VFS format")
     # End of VFS
 
     # Startup script
