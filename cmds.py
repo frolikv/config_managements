@@ -37,14 +37,25 @@ def cd(cur_vfs, cur_path = '', to_go = ''):
     if to_go[-1] != '/':
         to_go += '/'
 
+    print(to_go)
+    if to_go == '../':
+        if cur_path == '/':
+            return [f'Invalid path', 1, cur_path]
+        parent = cur_path[:-1]
+        parent = parent[:parent.rfind('/')]
+        print("\t" + parent)
+        return [f'Current path is {parent}/', 1, parent]
+
+    if to_go == '/':
+        return [f'Current path is {to_go}', 0, to_go]
     if to_go[0] == '/':
         if to_go[:-1] in cur_vfs.keys() and cur_vfs[to_go[:-1]]['type'] == 'dir':
             return [f'Current path is {to_go}', 0, to_go]
         else:
             return [f'Invalid path - {to_go}', 1, cur_path]
     else:
-        print(to_go[:-1])
-        print(vfs.get_children(cur_vfs, f"{cur_path}"))
+        # print(to_go[:-1])
+        # print(vfs.get_children(cur_vfs, f"{cur_path}"))
 
         if (to_go[:-1] in vfs.get_children(cur_vfs, f"{cur_path}")
                 and cur_vfs[f"{cur_path}{to_go[:-1]}"]['type'] == 'dir'):

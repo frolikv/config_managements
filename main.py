@@ -2,6 +2,7 @@ import shlex
 import os
 import tkinter as tk
 from tkinter import scrolledtext
+from datetime import datetime
 
 import vfs
 import cmds
@@ -15,12 +16,13 @@ input_var = None
 vfs_path = None
 cur_vfs = None
 cur_path = None
+start_time = None
 
 ERR_MSG = "unknown command:"
 
 def handle(a):
     l = shlex.split(a)
-    global cur_path
+    global cur_path, start_time
 
     cmd = ""
     if l:
@@ -34,6 +36,10 @@ def handle(a):
         res = cmds.cd(cur_vfs, cur_path, l[1])
         cur_path = res[2]
         return res
+    if cmd == "date":
+        return [f"Current date is {datetime.now()}", 0]
+    if cmd == "uptime":
+        return [f"Programm is running for {datetime.now() - start_time}"]
     if cmd == "exit":
         root.quit()
         return ["", 0]
@@ -86,7 +92,7 @@ def on_submit():
     result = handle(user_input)
     print_to_console(f"> {user_input}")
     print_to_console(result[0])
-    print(result)
+    # print(result)
     entry.delete(0, tk.END)
 
 
@@ -153,6 +159,7 @@ def start_procedure():
 
 if __name__ == "__main__":
     # global root, entry, output_text, submit_button
+    start_time = datetime.now()
 
     root = tk.Tk()
     current_dir = os.getcwd()
