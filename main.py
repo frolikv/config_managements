@@ -14,6 +14,7 @@ input_var = None
 
 vfs_path = None
 cur_vfs = None
+cur_path = None
 
 ERR_MSG = "unknown command:"
 
@@ -24,7 +25,9 @@ def handle(a):
     if l:
         cmd = l[0]
 
-    if cmd == "ls" or cmd == "cd":
+    if cmd == "ls":
+        return cmds.ls(cur_vfs, cur_path)
+    if cmd == "cd":
         return [" ".join(l), 0]
     if cmd == "exit":
         root.quit()
@@ -101,13 +104,22 @@ def start_procedure():
             global cur_vfs
             cur_vfs = vfs.load_vfs(vfs_path)
             # print(cur_vfs)
-            print_to_console("VFS loaded")
-            break
         except FileNotFoundError:
             print_to_console("File not found")
             continue
         except BaseException:
             print_to_console("Wrong VFS format")
+
+        if "/" not in cur_vfs.keys():
+            print_to_console("Root dir is not found")
+            continue
+
+        print_to_console("VFS loaded")
+        global cur_path
+        cur_path = "/"
+        break
+
+
     # End of VFS
 
     # Startup script
