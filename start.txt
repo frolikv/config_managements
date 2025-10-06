@@ -1,4 +1,4 @@
 ls 123  321
 cd 123
-test
+vfs-save enotik
 cd awd

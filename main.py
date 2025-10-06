@@ -3,7 +3,6 @@ import os
 import tkinter as tk
 from tkinter import scrolledtext
 
-import vfs
 
 root = None
 entry = None
@@ -12,6 +11,7 @@ submit_button = None
 input_var = None
 
 vfs_path = None
+cur_vfs = None
 
 ERR_MSG = "unknown command:"
 
@@ -23,11 +23,20 @@ def handle(a):
         cmd = l[0]
 
     if cmd == "ls" or cmd == "cd":
-        return " ".join(l)
+        return [" ".join(l), 0]
     if cmd == "exit":
         root.quit()
-        return ""
-    return f"{ERR_MSG} {cmd}"
+        return ["", 0]
+    # if cmd == "vfs-save":
+    #     if len(l) < 2:
+    #         return ["Saving path is not specified", 1]
+    #     res = cmds.vfs_save(cur_vfs, l[1])
+    #     if res == 0:
+    #         return ["Current VFS was successfully saved", 0]
+    #     else:
+    #         return ["VFS is not loaded", 1]
+
+    return [f"{ERR_MSG} {cmd}", 1]
 
 
 def print_to_console(string):
@@ -66,35 +75,37 @@ def on_submit():
 
     result = handle(user_input)
     print_to_console(f"> {user_input}")
-    print_to_console(result)
+    print_to_console(result[0])
+    print(result)
     entry.delete(0, tk.END)
 
 
 def start_procedure():
     # VFS
-    print_to_console("Please, enter VFS path (or \"q\")")
-    while True:
-        global vfs_path
-        vfs_path = get_from_console()
-        print_to_console(f"> {vfs_path}")
-
-        if (vfs_path == "q"):
-            print_to_console("VFS skipped")
-            vfs_path = None
-            break
-        if not (vfs_path.endswith(".csv")):
-            print_to_console("VFS extension is not .csv")
-            continue
-        try:
-            loaded_vfs = vfs.load_vfs(vfs_path)
-            print(loaded_vfs)
-            print_to_console("VFS loaded")
-            break
-        except FileNotFoundError:
-            print_to_console("File not found")
-            continue
-        except BaseException:
-            print_to_console("Wrong VFS format")
+    # print_to_console("Please, enter VFS path (or \"q\")")
+    # while True:
+    #     global vfs_path
+    #     vfs_path = get_from_console()
+    #     print_to_console(f"> {vfs_path}")
+    #
+    #     if (vfs_path == "q"):
+    #         print_to_console("VFS skipped")
+    #         vfs_path = None
+    #         break
+    #     if not (vfs_path.endswith(".csv")):
+    #         print_to_console("VFS extension is not .csv")
+    #         continue
+    #     try:
+    #         global cur_vfs
+    #         cur_vfs = vfs.load_vfs(vfs_path)
+    #         # print(cur_vfs)
+    #         print_to_console("VFS loaded")
+    #         break
+    #     except FileNotFoundError:
+    #         print_to_console("File not found")
+    #         continue
+    #     except BaseException:
+    #         print_to_console("Wrong VFS format")
     # End of VFS
 
     # Startup script
@@ -113,10 +124,10 @@ def start_procedure():
                     to_print = cmd.replace('\n', '')
                     print_to_console(f"> {to_print}")
                     res = handle(cmd)
-                    if res == f"{ERR_MSG} {to_print}":
-                        print_to_console(f"Error occurred in startup script - {res}")
+                    if res[1] != 0:
+                        print_to_console(f"Error occurred in startup script - {res[0]}")
                         break
-                    print_to_console(res)
+                    print_to_console(res[0])
                 break
         except BaseException:
             print_to_console("File not found")

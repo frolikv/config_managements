@@ -1,0 +1,7 @@
+path,type,content
+/,dir,
+/home,dir,
+/home/user,dir,
+/home/user/docs,dir,
+/home/user/docs/example.txt,file,hello world!
+/home/user/md.md,file,# One more example\n\nto test the system
