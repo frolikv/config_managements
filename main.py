@@ -20,6 +20,7 @@ ERR_MSG = "unknown command:"
 
 def handle(a):
     l = shlex.split(a)
+    global cur_path
 
     cmd = ""
     if l:
@@ -28,7 +29,11 @@ def handle(a):
     if cmd == "ls":
         return cmds.ls(cur_vfs, cur_path)
     if cmd == "cd":
-        return [" ".join(l), 0]
+        if len(l) < 2:
+            return ["Path is not specified", 1]
+        res = cmds.cd(cur_vfs, cur_path, l[1])
+        cur_path = res[2]
+        return res
     if cmd == "exit":
         root.quit()
         return ["", 0]
@@ -118,8 +123,6 @@ def start_procedure():
         global cur_path
         cur_path = "/"
         break
-
-
     # End of VFS
 
     # Startup script

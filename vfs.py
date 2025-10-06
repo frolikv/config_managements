@@ -9,6 +9,7 @@ def load_vfs(csv_path):
             type = row['type']
             content = row.get('content', '') if type == 'file' else None
             vfs[path] = {'type': type, 'content': content}
+    print(vfs)
     return vfs
 
 def get_children(vfs, path):
