@@ -10,7 +10,7 @@ def vfs_save(cur_vfs, save_path):
     return 0
 
 def ls(cur_vfs, cur_path = ''):
-    print(cur_path)
+    # print(cur_path)
     if not cur_vfs:
         return ['VFS is not defined', 1]
     if cur_path[-1] != '/':
@@ -90,5 +90,20 @@ def rmdir(cur_vfs, cur_path = '', del_path = ''):
                 return ["Directory removed", 0]
         else:
             return [f'Invalid path - {del_path}', 1]
-
-    return [0, 0]
+    else:
+        if (del_path[:-1] in vfs.get_children(cur_vfs, f"{cur_path}")
+                and cur_vfs[f"{cur_path}{del_path[:-1]}"]['type'] == 'dir'):
+            for node in cur_vfs:
+                if node.startswith(f"{cur_path}{del_path[:-1]}"):
+                    to_del.append(node)
+            if cur_path in to_del:
+                # print(f"{cur_path}{del_path[:-1]}")
+                # print(to_del)
+                return ["You can't delete directory, containing current position", 1]
+            else:
+                for node in to_del:
+                    cur_vfs.pop(node)
+                print(f"Update VFS: {cur_vfs}")
+                return ["Directory removed", 0]
+        else:
+            return [f'Invalid path - {cur_path}{del_path}', 1]

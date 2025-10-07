@@ -1,1 +1,3 @@
 cd /home/user
+rmdir docs
+rmdir test
