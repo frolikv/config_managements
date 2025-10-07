@@ -1,4 +1,1 @@
-ls 123  321
-cd 123
-vfs-save enotik
-cd awd
+cd /home/user

@@ -40,6 +40,11 @@ def handle(a):
         return [f"Current date is {datetime.now()}", 0]
     if cmd == "uptime":
         return [f"Programm is running for {datetime.now() - start_time}"]
+    if cmd == "rmdir":
+        if len(l) < 2:
+            return ["Path is not specified", 1]
+        res = cmds.rmdir(cur_vfs, cur_path, l[1])
+        return res
     if cmd == "exit":
         root.quit()
         return ["", 0]
